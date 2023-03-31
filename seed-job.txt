@@ -1,0 +1,32 @@
+job('dsl-job-2'){
+  description('this job is created using dsl seed job')
+}
+
+job('dsl-job-1'){
+  description('this job is created using dsl seed job')
+  parameters{
+  stringParam("Planet", defaultValue="World", description= 'This is the world')
+    choiceParam("OPTION", ['option 1 (default)', 'option 2', 'option 3'])
+  }
+  scm{
+  git("https://github.com/rdhanai/weather-app", "master")
+  }
+  triggers{
+  cron('0 0 * * *')
+  }
+  steps {
+    wrappers{
+    colorizeOutput(colorMap = 'xterm')
+    }
+      shell("""
+	echo 'Hello World!'
+    echo 'Multiple shell commands can be run this way'
+	C:/ProgramData/Jenkins/.jenkins/workspace/first-seed-dsl-job/test.sh
+	"""
+       )
+  }
+  publishers{
+  mailer('dhanai_rajpal@yahoo.com', true, true)
+  }
+  
+}
